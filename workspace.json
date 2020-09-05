@@ -1,7 +1,208 @@
 {
   "version": 1,
-  "projects": {},
+  "projects": {
+    "sanity": {
+      "root": "apps/sanity",
+      "sourceRoot": "apps/sanity/src",
+      "projectType": "application",
+      "schematics": {},
+      "architect": {
+        "build": {
+          "builder": "@nrwl/web:build",
+          "options": {
+            "outputPath": "dist/apps/sanity",
+            "index": "apps/sanity/src/index.html",
+            "main": "apps/sanity/src/main.tsx",
+            "polyfills": "apps/sanity/src/polyfills.ts",
+            "tsConfig": "apps/sanity/tsconfig.app.json",
+            "assets": ["apps/sanity/src/favicon.ico", "apps/sanity/src/assets"],
+            "styles": [],
+            "scripts": [],
+            "webpackConfig": "@nrwl/react/plugins/webpack"
+          },
+          "configurations": {
+            "production": {
+              "fileReplacements": [
+                {
+                  "replace": "apps/sanity/src/environments/environment.ts",
+                  "with": "apps/sanity/src/environments/environment.prod.ts"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "extractCss": true,
+              "namedChunks": false,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "2mb",
+                  "maximumError": "5mb"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "builder": "@nrwl/workspace:run-commands",
+          "options": {
+            "commands": [
+              "npx sanity start"
+            ],
+            "cwd": "apps/sanity/"
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:lint",
+          "options": {
+            "linter": "eslint",
+            "tsConfig": [
+              "apps/sanity/tsconfig.app.json",
+              "apps/sanity/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!apps/sanity/**/*"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "apps/sanity/jest.config.js",
+            "tsConfig": "apps/sanity/tsconfig.spec.json",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "sanity-e2e": {
+      "root": "apps/sanity-e2e",
+      "sourceRoot": "apps/sanity-e2e/src",
+      "projectType": "application",
+      "architect": {
+        "e2e": {
+          "builder": "@nrwl/cypress:cypress",
+          "options": {
+            "cypressConfig": "apps/sanity-e2e/cypress.json",
+            "tsConfig": "apps/sanity-e2e/tsconfig.e2e.json",
+            "devServerTarget": "sanity:serve"
+          },
+          "configurations": {
+            "production": {
+              "devServerTarget": "sanity:serve:production"
+            }
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:lint",
+          "options": {
+            "linter": "eslint",
+            "tsConfig": ["apps/sanity-e2e/tsconfig.e2e.json"],
+            "exclude": ["**/node_modules/**", "!apps/sanity-e2e/**/*"]
+          }
+        }
+      }
+    },
+    "gatsby-site": {
+      "root": "apps/gatsby-site",
+      "sourceRoot": "apps/gatsby-site/src",
+      "projectType": "application",
+      "schematics": {},
+      "architect": {
+        "build": {
+          "builder": "@nrwl/gatsby:build",
+          "options": {
+            "outputPath": "apps/gatsby-site/public",
+            "uglify": true,
+            "color": true,
+            "profile": false,
+            "port": 3030
+          },
+          "configurations": {
+            "production": {}
+          }
+        },
+        "serve": {
+          "builder": "@nrwl/gatsby:server",
+          "options": {
+            "buildTarget": "gatsby-site:build"
+          },
+          "configurations": {
+            "production": {
+              "buildTarget": "gatsby-site:build:production"
+            }
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:lint",
+          "options": {
+            "linter": "eslint",
+            "tsConfig": [
+              "apps/gatsby-site/tsconfig.json",
+              "apps/gatsby-site/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!apps/gatsby-site/**/*"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "apps/gatsby-site/jest.config.js",
+            "tsConfig": "apps/gatsby-site/tsconfig.spec.json",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "gatsby-site-e2e": {
+      "root": "apps/gatsby-site-e2e",
+      "sourceRoot": "apps/gatsby-site-e2e/src",
+      "projectType": "application",
+      "architect": {
+        "e2e": {
+          "builder": "@nrwl/cypress:cypress",
+          "options": {
+            "cypressConfig": "apps/gatsby-site-e2e/cypress.json",
+            "tsConfig": "apps/gatsby-site-e2e/tsconfig.e2e.json",
+            "devServerTarget": "gatsby-site:serve"
+          },
+          "configurations": {
+            "production": {
+              "devServerTarget": "gatsby-site:serve:production"
+            }
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": ["apps/gatsby-site-e2e/tsconfig.e2e.json"],
+            "exclude": ["**/node_modules/**", "!apps/gatsby-site-e2e/**/*"]
+          }
+        }
+      }
+    }
+  },
   "cli": {
-    "defaultCollection": "@nrwl/workspace"
-  }
+    "defaultCollection": "@nrwl/react"
+  },
+  "schematics": {
+    "@nrwl/react": {
+      "application": {
+        "style": "none",
+        "linter": "eslint",
+        "babel": true
+      },
+      "component": {
+        "style": "none"
+      },
+      "library": {
+        "style": "none",
+        "linter": "eslint"
+      }
+    },
+    "@nrwl/gatsby": {
+      "application": {}
+    }
+  },
+  "defaultProject": "sanity"
 }

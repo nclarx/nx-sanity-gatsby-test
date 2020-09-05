@@ -21,5 +21,20 @@
       }
     }
   },
-  "projects": {}
+  "projects": {
+    "sanity": {
+      "tags": []
+    },
+    "sanity-e2e": {
+      "tags": [],
+      "implicitDependencies": ["sanity"]
+    },
+    "gatsby-site": {
+      "tags": []
+    },
+    "gatsby-site-e2e": {
+      "tags": [],
+      "implicitDependencies": ["gatsby-site"]
+    }
+  }
 }
